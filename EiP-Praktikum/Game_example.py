@@ -20,6 +20,7 @@ tile_size = 50
 background = pg.image.load("assets/Main_Background 3.png")
 background = pg.transform.scale(background, (1000, 800))
 
+
 #Player
 class Player():
     def __init__(self, x, y):
@@ -31,7 +32,8 @@ class Player():
         self.width =  self.image.get_width()
         self.height = self.image.get_height()
         self.vel_y = 0
-        self.jumped = False
+        self.jump= 0
+        self.maxjumps=2
         self.direction = 0
 
     def update(self):
@@ -40,11 +42,10 @@ class Player():
 
         #get key presses
         key = pygame.key.get_pressed()
-        if key[pygame.K_SPACE] and self.jumped == False:
+        if key[pygame.K_SPACE] and self.jump > 0:
             self.vel_y = -15
-            self.jumped = True
-        if key[pygame.K_SPACE] == False:
-            self.jumped = False
+            self.jump -= 1
+
         if key[pygame.K_LEFT]:
             dx -= 5
         if key[pygame.K_RIGHT]:
@@ -72,6 +73,7 @@ class Player():
                 #check if above the ground i.e. falling
                 elif self.vel_y >= 0:
                     dy = tile[1].top - self.rect.bottom
+                    self.jump=self.maxjumps
 
         #update player coordinates
         self.rect.x += dx
@@ -130,12 +132,35 @@ class World():
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
+                if tile == 5:
+                    ghost = Enemy(col_count * tile_size, row_count * tile_size)
+                    ghost_group.add(ghost)
                 col_count += 1
             row_count += 1
 
     def draw(self):
         for tile in self.tile_list:
             screen.blit(tile[0], tile[1])
+
+
+#Enemy
+class Enemy(pg.sprite.Sprite):
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.image = pg.image.load("assets/Ghost_1.png")
+        self.image = pg.transform.scale(self.image, (tile_size -7, tile_size -17))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.move_direction = 1
+        self.move_counter = 0
+
+    def update(self):
+        self.rect.x += self.move_direction
+        self.move_counter += 1
+        if abs(self.move_counter) > 50:
+            self.move_direction *= -1
+            self.move_counter *= -1
 
 
 world_data =[
@@ -146,7 +171,7 @@ world_data =[
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-[1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+[1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1],
@@ -158,6 +183,9 @@ world_data =[
 ]
 
 player = Player(100, screen_height - 130)
+
+ghost_group = pg.sprite.Group()
+
 world = World(world_data)
 
 run = True
@@ -168,6 +196,9 @@ while run:
     screen.blit(background, (0, 0))
 
     world.draw()
+
+    ghost_group.update()
+    ghost_group.draw(screen)
 
     player.update()
 
