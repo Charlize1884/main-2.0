@@ -3,6 +3,7 @@ import pygame as pg
 from pygame.locals import *
 from player import Player
 from world import World
+from Ghost import Ghost
 
 pg.init()
 
@@ -46,6 +47,7 @@ world_data =[
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
+ghost1=Ghost(500, 400, tile_size)
 player = Player(100, screen_height - 130, tile_size)
 world = World(world_data, tile_size)
 
@@ -57,7 +59,7 @@ while run:
     screen.blit(background, (0, 0))
 
     world.draw(screen)
-
+    ghost1.update(screen)
     player.update(world, screen, screen_height)
 
     for event in pg.event.get():
