@@ -47,7 +47,7 @@ world_data =[
 ]
 
 player = Player(100, screen_height - 130, tile_size)
-world = World(screen, world_data, tile_size)
+world = World(world_data, tile_size)
 
 run = True
 while run:
@@ -56,7 +56,7 @@ while run:
 
     screen.blit(background, (0, 0))
 
-    world.draw()
+    world.draw(screen)
 
     player.update(world, screen, screen_height)
 
