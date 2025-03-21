@@ -1,6 +1,6 @@
 import pygame
 class World():
-    def __init__(self,screen, data, tile_size):
+    def __init__(self,data, tile_size):
         self.tile_list = []
 
         #load images
@@ -47,6 +47,6 @@ class World():
                 col_count += 1
             row_count += 1
 
-    def draw(self):
+    def draw(self, screen):
         for tile in self.tile_list:
             screen.blit(tile[0], tile[1])
