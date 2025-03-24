@@ -23,9 +23,6 @@ tile_size = 50
 background = pg.image.load("assets/Main_Background 3.png")
 background = pg.transform.scale(background, (1000, 800))
 
-#Player
-
-#World
 
 
 world_data =[
