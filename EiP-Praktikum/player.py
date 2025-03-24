@@ -1,4 +1,5 @@
 import pygame
+from World_building_blocks import *
 from pygame.locals import *
 
 class Player():
@@ -27,9 +28,9 @@ class Player():
                 if k.key == K_SPACE and self.jumps > 0:
                     self.vel_y = -15
                     self.jumps -= 1
-        if key[K_LEFT]:
+        if key[K_a]:
             dx -= 5
-        if key[K_RIGHT]:
+        if key[K_d]:
             dx += 5
 
         #add gravity
@@ -41,22 +42,25 @@ class Player():
         #check for collision
         for tile in world.tile_list:
 
-            #check for collision in x direction
-            if tile[1].colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
-                dx = 0
+            if type(tile)==Wall or type(tile)==Platform:
+                if tile.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
+                    dx = 0
 
-            #check for collision in y direction
-            if tile[1].colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
-                #check if below the ground i.e. jumping
-                if self.vel_y < 0:
-                    dy = tile[1].bottom - self.rect.top
-                    self.vel_y = 0
-                #check if above the ground i.e. falling
-                elif self.vel_y >= 0:
-                    dy = tile[1].top - self.rect.bottom
-                    self.vel_y = 0
-                    self.jumps=self.maxjumps
+                # check for collision in y direction
+                if tile.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
+                    # check if below the ground i.e. jumping
+                    if self.vel_y < 0:
+                        dy = tile.rect.bottom - self.rect.top
+                        self.vel_y = 0
+                    # check if above the ground i.e. falling
+                    elif self.vel_y >= 0:
+                        dy = tile.rect.top - self.rect.bottom
+                        self.vel_y = 0
+                        self.jumps = self.maxjumps
 
+            elif type(tile)==Exit:
+                if tile.rect.colliderect(self.rect) and key[K_w]:
+                    pygame.quit()
         #update player coordinates
         self.rect.x += dx
         self.rect.y += dy
