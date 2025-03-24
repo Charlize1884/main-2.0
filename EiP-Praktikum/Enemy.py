@@ -22,4 +22,3 @@ class Enemy(pygame.sprite.Sprite):
         if self.move_counter>50:
             self.move_direction*=-1
             self.move_counter*=-1
-
