@@ -3,8 +3,17 @@ from pygame.locals import *
 
 class Player():
     def __init__(self, x, y, tile_size):
-        player_img = pygame.image.load("assets/Ninja_Walk1.png")
-        self.image = pygame.transform.scale(player_img, (tile_size-5, tile_size-5))
+        self.images_right = []
+        self.images_left = []
+        self.index = 0
+        self.counter = 0
+        for num in range(1, 4):
+            img_right = pygame.image.load(f"assets/Ninja_Walk{num}.png")
+            img_right = pygame.transform.scale(img_right, (tile_size -5, tile_size -5))
+            img_left = pygame.transform.flip(img_right, True, False)
+            self.images_right.append(img_right)
+            self.images_left.append(img_left)
+        self.image = self.images_right[self.index]
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -18,6 +27,7 @@ class Player():
     def update(self, world, screen, screen_height):
         dx = 0
         dy = 0
+        walk_cooldown = 8
 
         #get key presses
         key = pygame.key.get_pressed()
@@ -27,10 +37,18 @@ class Player():
                 if k.key == K_SPACE and self.jumps > 0:
                     self.vel_y = -15
                     self.jumps -= 1
-        if key[K_LEFT]:
+        if key[pygame.K_LEFT]:
             dx -= 5
-        if key[K_RIGHT]:
+            self.counter += 1
+            self.direction = -1
+        if key[pygame.K_RIGHT]:
             dx += 5
+            self.counter += 1
+            self.direction = 1
+        if key[pygame.K_LEFT] == False and key[pygame.K_RIGHT] == False:
+            self.counter = 0
+            self.index = 0
+            self.image = self.images_right[self.index]
 
         #add gravity
         self.vel_y += 1
