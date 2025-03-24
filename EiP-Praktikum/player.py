@@ -38,11 +38,11 @@ class Player():
                 if k.key == K_SPACE and self.jumps > 0:
                     self.vel_y = -15
                     self.jumps -= 1
-        if key[pygame.K_LEFT]:
+        if key[pygame.K_a]:
             dx -= 5
             self.counter += 1
             self.direction = -1
-        if key[pygame.K_RIGHT]:
+        if key[pygame.K_d]:
             dx += 5
             self.counter += 1
             self.direction = 1
