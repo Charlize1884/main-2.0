@@ -4,6 +4,7 @@ from pygame.locals import *
 from player import Player
 from world import World
 from Ghost import Ghost
+from Ende import Ende
 
 pg.init()
 
@@ -33,7 +34,7 @@ world_data =[
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 2, 1],
-[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1],
+[1, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -49,6 +50,7 @@ world_data =[
 
 ghost1=Ghost(500, 400, tile_size)
 player = Player(100, screen_height - 130, tile_size)
+
 world = World(world_data, tile_size)
 
 run = True

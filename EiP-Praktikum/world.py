@@ -9,6 +9,7 @@ class World():
         jump_pad_img = pygame.image.load("assets/Jumping_Pad_4.png")
         jump_pad_img2 = pygame.image.load("assets/Jumping_Pad_2.png")
         jump_pad_img3 = pygame.image.load("assets/Jumping_Pad_3_Stage_1.png")
+        ende_img = pygame.image.load("assets/Exit.png")
 
 
 
@@ -23,22 +24,29 @@ class World():
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
-                if tile == 2:
+                elif tile == 2:
                     img = pygame.transform.scale(jump_pad_img, (tile_size, tile_size))
                     img_rect = img.get_rect()
                     img_rect.x = col_count * tile_size
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
-                if tile == 3:
+                elif tile == 3:
                     img = pygame.transform.scale(jump_pad_img2, (tile_size, tile_size))
                     img_rect = img.get_rect()
                     img_rect.x = col_count * tile_size
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
-                if tile == 4:
+                elif tile == 4:
                     img = pygame.transform.scale(jump_pad_img3, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                elif tile == 5:
+                    img = pygame.transform.scale(ende_img, (tile_size, tile_size))
                     img_rect = img.get_rect()
                     img_rect.x = col_count * tile_size
                     img_rect.y = row_count * tile_size
