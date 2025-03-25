@@ -24,6 +24,12 @@ class Exit(Tile):
 class Lava(Tile):
     def __init__(self, x, y, tile_size):
         Tile.__init__(self, x, y +10, "assets/Lava1.png", tile_size)
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
+        self.damage = 6
+class Spiked_Wall(Tile):
+    def __init__(self, x, y, tile_size):
+        Tile.__init__(self, x, y, "assets/Spiked_Wall.png", tile_size)
 
+class Checkpoint(Tile):
+    def __init__(self, x, y, tile_size):
+        Tile.__init__(self, x, y, "assets/Checkpoint.png", tile_size)
+        self.set_respawnpoint = (x, y)

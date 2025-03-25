@@ -22,12 +22,14 @@ class Player():
         self.image = self.images_right[self.index]
 
         #position
+        self.respawnpoint = (x, y)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.width =  self.image.get_width()
         self.height = self.image.get_height()
         self.vel_y = 0
+        self.can_jump = True
         self.jumps = 0
         self.maxjumps = 1
         self.direction = 0
@@ -46,11 +48,13 @@ class Player():
         key = pygame.key.get_pressed()
         keys_down = pygame.event.get(pygame.KEYDOWN)
         pygame.event.clear()
-        #for k in keys_down:
-        #    if k.type == pygame.KEYDOWN:
-        if key[K_SPACE] and self.jumps == self.maxjumps:
-                    self.vel_y = -15
-                    self.jumps -= 1
+        if key[K_SPACE] and self.jumps > 0 and self.can_jump:
+            self.vel_y = -15
+            self.jumps -= 1
+        if key[K_SPACE]:
+            self.can_jump = False
+        else:
+            self.can_jump = True
         if key[pygame.K_a]:
             dx -= 5
             self.counter += 1
@@ -90,7 +94,7 @@ class Player():
                         dx = tile.rect.right - self.rect.left
                     else:
                         dx = tile.rect.left - self.rect.right
-
+                    print((self.rect.left, self.rect.right), (tile.rect.left, tile.rect.right) )
                 # check for collision in y direction
                 if tile.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
                     # check if below the ground i.e. jumping
@@ -102,16 +106,13 @@ class Player():
                         dy = tile.rect.top - self.rect.bottom
                         self.vel_y = 0
                         self.jumps = self.maxjumps
-
+            elif type(tile)==Checkpoint:
+                if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
+                     self.respawnpoint = tile.set_respawnpoint
             elif type(tile)==Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
                     pygame.quit()
 
-            elif type(tile)==Lava:
-                if tile.rect.colliderect(self.rect.x + dx, self.rect.y + dy, self.width, self.height-50):
-                    dx = 0
-                    dy = 0
-                    pygame.quit()
 
 
 

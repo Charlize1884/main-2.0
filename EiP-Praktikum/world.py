@@ -40,3 +40,6 @@ class World():
             screen.blit(tile.image, tile.rect)
         for tile in self.fake_tile_list:
             screen.blit(tile.image, tile.rect)
+    def draw_enemys(self, screen):
+        for enemy in self.enemy_list:
+            screen.blit(enemy.image, enemy.rect)
