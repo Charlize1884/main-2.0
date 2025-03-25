@@ -2,6 +2,7 @@ import pygame
 from World_building_blocks import *
 from pygame.locals import *
 from usefull_functions import *
+from Enemy import Enemy
 
 class Player():
     def __init__(self, x, y, tile_size):
@@ -107,7 +108,7 @@ class Player():
                     pygame.quit()
 
             elif type(tile)==Lava:
-                if tile.rect.colliderect(self.rect.x + dx, self.rect.y + dy, self.width, self.height -20):
+                if tile.rect.colliderect(self.rect.x + dx, self.rect.y + dy, self.width, self.height-50):
                     dx = 0
                     dy = 0
                     pygame.quit()
