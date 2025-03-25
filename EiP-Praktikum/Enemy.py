@@ -14,3 +14,4 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.action_speed = action_speed
+
