@@ -28,3 +28,6 @@ class Button():
             self.text = self.font.render(self.text_input, True, self.hovering_color)
         else:
             self.text = self.font.render(self.text_input, True, self.base_color)
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)

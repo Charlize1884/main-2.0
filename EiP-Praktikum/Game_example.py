@@ -4,6 +4,7 @@ from pygame.locals import *
 from player import Player
 from world import World
 from Patroling_Ghost import Patroling_Ghost
+from button import Button
 
 pg.init()
 
