@@ -117,10 +117,14 @@ class Player():
 
 
         if self.hit:
+            if self.time_since_last_hit < 20:
+
+                self.image = pygame.transform.scale(pygame.image.load("assets/Jetpack.png"), (self.tile_size - 5, self.tile_size - 5))
+
+
             if self.time_since_last_hit == 45:
                 self.hit = False
             self.time_since_last_hit += 1
-
         else:
             for hitbox in world.enemy_list:
                 if pygame.Rect.colliderect(self.rect, hitbox.rect) and self.hit == False:
