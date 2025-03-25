@@ -1,10 +1,10 @@
 import pygame
 import pygame as pg
 from pygame.locals import *
-from player import Player
-from world import World
+from Player import Player
+from World import World
 from Patroling_Ghost import Patroling_Ghost
-from button import Button
+from Button import Button
 
 pg.init()
 

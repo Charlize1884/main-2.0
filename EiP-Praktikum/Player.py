@@ -1,7 +1,7 @@
 import pygame
 from World_building_blocks import *
 from pygame.locals import *
-from usefull_functions import *
+from ultilities import *
 
 class Player():
     def __init__(self, x, y, tile_size):
