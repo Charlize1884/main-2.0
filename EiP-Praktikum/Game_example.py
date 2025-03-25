@@ -11,8 +11,8 @@ pg.init()
 clock = pg.time.Clock()
 fps = 60
 
-screen_width = 1000
-screen_height = 800
+screen_width = 960
+screen_height = 640
 
 screen = pg.display.set_mode((screen_width, screen_height))
 pg.display.set_caption("Platformer")
@@ -43,7 +43,7 @@ world_data =[
 [1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
 ]
 
-player = Player(100, screen_height - 130, tile_size)
+player = Player(100, 600, tile_size)
 world = World(world_data, tile_size)
 
 run = True
@@ -59,8 +59,32 @@ while run:
     for Enemy in world.enemy_list:
         Enemy.update()
 
+    #Level scrolling
+    if player.rect.bottom > screen_height - 100:
+        player.rect.y -= 15
+        for entity in world.tile_list:
+            entity.rect.y -= 15
+        for enemy in world.enemy_list:
+            enemy.rect.y -= 15
+    if player.rect.bottom < screen_height / 3:
+        player.rect.y += 15
+        for entity in world.tile_list:
+            entity.rect.y += 15
+        for enemy in world.enemy_list:
+            enemy.rect.y += 15
+    if player.rect.left > screen_width - screen_width / 2:
+        player.rect.x -= 5
+        for entity in world.tile_list:
+            entity.rect.x -= 5
+        for enemy in world.enemy_list:
+            enemy.rect.x -= 5
+    if player.rect.right < screen_width / 2:
+        player.rect.x += 5
+        for entity in world.tile_list:
+            entity.rect.x += 5
+        for enemy in world.enemy_list:
+            enemy.rect.x += 5
     player.update(world, screen_height)
-
     #graphics
     player.draw(screen)
     world.draw(screen)
