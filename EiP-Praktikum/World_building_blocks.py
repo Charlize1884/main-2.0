@@ -24,4 +24,6 @@ class Exit(Tile):
 class Lava(Tile):
     def __init__(self, x, y, tile_size):
         Tile.__init__(self, x, y +10, "assets/Lava1.png", tile_size)
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
 

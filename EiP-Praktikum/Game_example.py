@@ -10,7 +10,6 @@ pg.init()
 
 clock = pg.time.Clock()
 fps = 60
-
 screen_width = 960
 screen_height = 640
 
@@ -86,8 +85,9 @@ while run:
             enemy.rect.x += 5
     player.update(world, screen_height)
     #graphics
-    player.draw(screen)
+
     world.draw(screen)
+    player.draw(screen)
     for Enemy in world.enemy_list:
         Enemy.draw(screen)
 
