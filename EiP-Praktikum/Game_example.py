@@ -23,8 +23,6 @@ tile_size = 50
 background = pg.image.load("assets/Main_Background 3.png")
 background = pg.transform.scale(background, (1000, 800))
 
-
-
 world_data =[
 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -49,7 +47,9 @@ world = World(world_data, tile_size)
 
 run = True
 while run:
-
+    key = pg.key.get_pressed()
+    if key[pg.K_ESCAPE]:
+        run = False
     clock.tick(fps)
 
     screen.blit(background, (0, 0))
