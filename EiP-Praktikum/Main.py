@@ -7,7 +7,6 @@ from Patroling_Ghost import Patroling_Ghost
 from Button import Button
 
 pg.init()
-
 clock = pg.time.Clock()
 fps = 60
 screen_width = 960
@@ -107,9 +106,8 @@ while run:
     #graphics
 
     world.draw(screen)
-    player.draw(screen)
     world.draw_enemys(screen)
-
+    player.draw(screen)
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False
