@@ -3,7 +3,7 @@ import pygame as pg
 from pygame.locals import *
 from player import Player
 from world import World
-from Ghost import Ghost
+from Patroling_Ghost import Patroling_Ghost
 
 pg.init()
 
@@ -33,7 +33,7 @@ world_data =[
 [1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-[1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1],
+[1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, "g", 0, 0, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1],
@@ -44,7 +44,6 @@ world_data =[
 [1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
 ]
 
-ghost1=Ghost(600, 350, tile_size)
 player = Player(100, screen_height - 130, tile_size)
 world = World(world_data, tile_size)
 
@@ -55,9 +54,17 @@ while run:
 
     screen.blit(background, (0, 0))
 
+
+    for Enemy in world.enemy_list:
+        Enemy.update()
+
+    player.update(world, screen_height)
+
+    #graphics
     world.draw(screen)
-    ghost1.update(screen)
-    player.update(world, screen, screen_height)
+    for Enemy in world.enemy_list:
+        Enemy.draw(screen)
+    player.draw(screen)
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False
