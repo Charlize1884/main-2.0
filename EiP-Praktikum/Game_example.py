@@ -66,24 +66,32 @@ while run:
             entity.rect.y -= 15
         for enemy in world.enemy_list:
             enemy.rect.y -= 15
+        for block in world.fake_tile_list:
+            block.rect.y -= 15
     if player.rect.bottom < screen_height / 3:
         player.rect.y += 15
         for entity in world.tile_list:
             entity.rect.y += 15
         for enemy in world.enemy_list:
             enemy.rect.y += 15
+        for block in world.fake_tile_list:
+            block.rect.y += 15
     if player.rect.left > screen_width - screen_width / 2:
         player.rect.x -= 5
         for entity in world.tile_list:
             entity.rect.x -= 5
         for enemy in world.enemy_list:
             enemy.rect.x -= 5
+        for block in world.fake_tile_list:
+            block.rect.x -= 5
     if player.rect.right < screen_width / 2:
         player.rect.x += 5
         for entity in world.tile_list:
             entity.rect.x += 5
         for enemy in world.enemy_list:
             enemy.rect.x += 5
+        for block in world.fake_tile_list:
+            block.rect.x += 5
     player.update(world, screen_height)
     #graphics
     player.draw(screen)
