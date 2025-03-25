@@ -21,4 +21,9 @@ class Exit(Tile):
     def __init__(self, x, y, tile_size):
         Tile.__init__(self, x, y, "assets/Exit.png", tile_size)
 
+class Lava(Tile):
+    def __init__(self, x, y, tile_size):
+        Tile.__init__(self, x, y+10, "assets/Lava.png", tile_size)
+
+
 

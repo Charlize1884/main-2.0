@@ -49,10 +49,21 @@ class Player():
             dx += 5
             self.counter += 1
             self.direction = 1
-        if key[pygame.K_LEFT] == False and key[pygame.K_RIGHT] == False:
+        if key[pygame.K_d] == False and key[pygame.K_a] == False:
             self.counter = 0
             self.index = 0
             self.image = self.images_right[self.index]
+
+        #handling animation
+        if self.counter > walk_cooldown:
+            self.counter = 0
+            self.index += 1
+            if self.index >= len(self.images_right):
+                self.index = 0
+            if self.direction == 1:
+                self.image = self.images_right[self.index]
+            if self.direction == -1:
+                self.image = self.images_left[self.index]
 
         #add gravity
         self.vel_y += 1
