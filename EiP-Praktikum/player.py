@@ -21,6 +21,7 @@ class Player():
         self.image = self.images_right[self.index]
 
         #position
+        self.respawnpoint = (x, y)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -29,7 +30,7 @@ class Player():
         self.vel_y = 0
         self.can_jump = True
         self.jumps = 0
-        self.maxjumps = 2
+        self.maxjumps = 1
         self.direction = 0
 
         #enemy interaction
@@ -104,16 +105,13 @@ class Player():
                         dy = tile.rect.top - self.rect.bottom
                         self.vel_y = 0
                         self.jumps = self.maxjumps
-
+            elif type(tile)==Checkpoint:
+                if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
+                     self.respawnpoint = tile.set_respawnpoint
             elif type(tile)==Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
                     pygame.quit()
 
-            elif type(tile)==Lava:
-                if tile.rect.colliderect(self.rect.x + dx, self.rect.y + dy, self.width, self.height -20):
-                    dx = 0
-                    dy = 0
-                    pygame.quit()
 
 
 

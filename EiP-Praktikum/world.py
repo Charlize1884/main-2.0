@@ -27,7 +27,7 @@ class World():
                     self.tile_list.append(object)
                 elif tile == 4:
                     object = Lava(col_count*tile_size, row_count*tile_size, tile_size)
-                    self.tile_list.append(object)
+                    self.enemy_list.append(object)
                 elif tile == "g":
                     object = Patroling_Ghost(col_count*tile_size, row_count * tile_size, tile_size)
                     self.enemy_list.append(object)
@@ -40,3 +40,6 @@ class World():
             screen.blit(tile.image, tile.rect)
         for tile in self.fake_tile_list:
             screen.blit(tile.image, tile.rect)
+    def draw_enemys(self, screen):
+        for enemy in self.enemy_list:
+            screen.blit(enemy.image, enemy.rect)

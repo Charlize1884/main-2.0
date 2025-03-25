@@ -101,8 +101,7 @@ while run:
     #graphics
     player.draw(screen)
     world.draw(screen)
-    for Enemy in world.enemy_list:
-        Enemy.draw(screen)
+    world.draw_enemys(screen)
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
