@@ -94,6 +94,14 @@ class Player():
                 if tile.rect.colliderect(self.rect) and key[K_w]:
                     pygame.quit()
 
+            elif type(tile)==Lava:
+                if tile.rect.colliderect(self.rect.x + dx, self.rect.y + dy, self.width, self.height -20):
+                    dx = 0
+                    dy = 0
+                    pygame.quit()
+
+
+
         if self.hit:
             if self.time_since_last_hit == 30:
                 self.hit = False

@@ -61,10 +61,11 @@ while run:
     player.update(world, screen_height)
 
     #graphics
+    player.draw(screen)
     world.draw(screen)
     for Enemy in world.enemy_list:
         Enemy.draw(screen)
-    player.draw(screen)
+
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False
