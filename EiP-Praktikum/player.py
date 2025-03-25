@@ -24,8 +24,11 @@ class Player():
         self.jumps = 0
         self.maxjumps = 1
         self.direction = 0
+        self.hitpoints = 0
+        self.hit = False
+        self.time_since_last_hit = 0
 
-    def update(self, world, screen, screen_height):
+    def update(self, world, screen_height):
         dx = 0
         dy = 0
         walk_cooldown = 8
@@ -79,6 +82,18 @@ class Player():
             elif type(tile)==Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
                     pygame.quit()
+
+        if self.hit:
+            if self.time_since_last_hit == 30:
+                self.hit = False
+            self.time_since_last_hit += 1
+
+        else:
+            for hitbox in world.enemy_list:
+                if pygame.Rect.colliderect(self.rect, hitbox.rect):
+                    self.hitpoints -= hitbox.damage
+                    self.hit = True
+                    self.time_since_last_hit = 0
         #update player coordinates
         self.rect.x += dx
         self.rect.y += dy
@@ -87,5 +102,5 @@ class Player():
             self.rect.bottom = screen_height
             dy = 0
 
-        #draw player onto screen
+    def draw(self, screen):
         screen.blit(self.image, self.rect)
