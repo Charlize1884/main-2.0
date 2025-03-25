@@ -8,7 +8,6 @@ class World():
         self.fake_tile_list = []
         self.enemy_list = []
 
-
         row_count = 0
         for row in data:
             col_count = 0

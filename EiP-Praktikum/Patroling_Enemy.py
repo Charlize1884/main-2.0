@@ -1,4 +1,5 @@
 from Enemy import Enemy
+import pygame
 class Patroling_Enemy(Enemy):
     def __init__(self, x, y, image, hitpoints, damage, speed, action_speed, tile_size ,move_direction):
         Enemy.__init__(self, x, y, image, hitpoints, damage, speed, action_speed, tile_size)
@@ -10,3 +11,4 @@ class Patroling_Enemy(Enemy):
         if self.move_counter>range:
             self.move_direction*=-1
             self.move_counter*=-1
+            self.image = pygame.transform.flip(self.image, True, False)

@@ -4,6 +4,7 @@ from pygame.locals import *
 from player import Player
 from world import World
 from Patroling_Ghost import Patroling_Ghost
+from button import Button
 
 pg.init()
 
@@ -61,10 +62,11 @@ while run:
     player.update(world, screen_height)
 
     #graphics
+    player.draw(screen)
     world.draw(screen)
     for Enemy in world.enemy_list:
         Enemy.draw(screen)
-    player.draw(screen)
+
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False
