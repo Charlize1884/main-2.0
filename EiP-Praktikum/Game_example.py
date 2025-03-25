@@ -39,18 +39,23 @@ world_data =[
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 9],
 [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 4, 4, 4, 4, 4, 1, 9, 9, 9],
-[1, 0, 0, 0, 0, 1, 1, 9, 9, 9, 9, 1, 1, 1, 1, 1, 9, 9, 9, 9],
+[1, 0, "p", 0, 0, 1, 1, 9, 9, 9, 9, 1, 1, 1, 1, 1, 9, 9, 9, 9],
 [1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
 ]
-
-player = Player(100, 600, tile_size)
+row_count = 0
+for i in world_data:
+    col_count = 0
+    for j in i:
+        if j == "p":
+              player = Player(col_count*tile_size, row_count*tile_size, tile_size)
+        col_count += 1
+    row_count += 1
 world = World(world_data, tile_size)
-
 run = True
 while run:
     key = pg.key.get_pressed()
     if key[pg.K_ESCAPE]:
-        run = False
+        pg.quit()
     clock.tick(fps)
 
     screen.blit(background, (0, 0))
