@@ -8,13 +8,6 @@ class World():
         self.fake_tile_list = []
         self.enemy_list = []
 
-        #load images
-        #jump_pad_img1/2/3 not implemented yet
-
-
-        jump_pad_img2 = pygame.image.load("assets/Jumping_Pad_2.png")
-        jump_pad_img3 = pygame.image.load("assets/Jumping_Pad_3_Stage_1.png")
-
 
         row_count = 0
         for row in data:
