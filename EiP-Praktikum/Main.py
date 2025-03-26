@@ -1,10 +1,7 @@
-import pygame
 import pygame as pg
-from pygame.locals import *
 from Player import Player
 from World import World
-from Patroling_Ghost import Patroling_Ghost
-from Button import Button
+
 
 pg.init()
 clock = pg.time.Clock()
@@ -43,13 +40,17 @@ world_data =[
 [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
 ]
 row_count = 0
-world = World(world_data, tile_size)
+world = World()
+world.load_map(world_data, 50)
+
 for i in world_data:
     col_count = 0
     for j in i:
         if j == "p":
             player = Player(col_count*tile_size, row_count*tile_size, tile_size)
-        col_count += 1
+            break
+        else:
+            col_count += 1
     row_count += 1
 
 run = True
