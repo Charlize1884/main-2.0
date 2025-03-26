@@ -22,16 +22,16 @@ class Player():
         self.image = self.images_right[self.index]
 
         #position
-        self.respawnpoint = (x, y)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.respawnpoint=[(self.rect.left), (self.rect.top)]
         self.width =  self.image.get_width()
         self.height = self.image.get_height()
         self.vel_y = 0
         self.can_jump = True
         self.jumps = 0
-        self.maxjumps = 200
+        self.maxjumps = 2
         self.direction = 0
         self.horizontal_scroll_pos = x
         self.vertical_scroll_pos = y
@@ -95,7 +95,7 @@ class Player():
                         dx = tile.rect.right - self.rect.left
                     else:
                         dx = tile.rect.left - self.rect.right
-                    print((self.rect.left, self.rect.right), (tile.rect.left, tile.rect.right) )
+
                 # check for collision in y direction
                 if tile.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
                     # check if below the ground i.e. jumping
@@ -109,7 +109,7 @@ class Player():
                         self.jumps = self.maxjumps
             elif type(tile)==Checkpoint:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
-                     self.respawnpoint = tile.set_respawnpoint
+                     self.respawnpoint = [tile.rect.left, tile.rect.top]
             elif type(tile)==Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
                     pygame.quit()
@@ -131,8 +131,9 @@ class Player():
                 if pygame.Rect.colliderect(self.rect, hitbox.rect) and self.hit == False:
                     self.hitpoints -= hitbox.damage
                     if self.hitpoints <= 0:
-                        pygame.quit()
-                    print(self.hitpoints)
+                        self.rect.left, self.rect.top = self.respawnpoint[0], self.respawnpoint[1]
+                        print(self.rect.topleft, self.respawnpoint)
+                        self.hitpoints = 6
                     self.hit = True
                     self.time_since_last_hit = 0
                     distance = center_distance(self.rect, hitbox.rect)
