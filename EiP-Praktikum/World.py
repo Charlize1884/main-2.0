@@ -1,6 +1,6 @@
 import pygame
 from World_building_blocks import *
-from Patroling_Ghost import Patroling_Ghost
+from PatrolingGhost import PatrolingGhost
 
 class World:
     def __init__(self):
@@ -36,7 +36,7 @@ class World:
                     object = Spiked_Wall(col_count * tile_size, row_count * tile_size, tile_size)
                     self.enemy_list.append(object)
                 elif tile == "g":
-                    object = Patroling_Ghost(col_count*tile_size, row_count * tile_size, tile_size)
+                    object = PatrolingGhost(col_count*tile_size, row_count * tile_size, tile_size)
                     self.enemy_list.append(object)
                 col_count += 1
             row_count += 1
