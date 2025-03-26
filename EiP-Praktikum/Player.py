@@ -1,8 +1,7 @@
-import pygame
-from World_building_blocks import *
 from pygame.locals import *
+from World_building_blocks import *
 from ultilities import *
-from Enemy import Enemy
+
 
 class Player():
     def __init__(self, x, y, tile_size):
@@ -35,6 +34,7 @@ class Player():
         self.direction = 0
         self.horizontal_scroll_pos = x
         self.vertical_scroll_pos = y
+
         #enemy interaction
         self.hitpoints = 6
         self.hit = False
@@ -47,7 +47,6 @@ class Player():
 
         #get key presses
         key = pygame.key.get_pressed()
-        keys_down = pygame.event.get(pygame.KEYDOWN)
         pygame.event.clear()
         if key[K_SPACE] and self.jumps > 0 and self.can_jump:
             self.vel_y = -15
@@ -89,7 +88,9 @@ class Player():
         #check for collision
         for tile in world.tile_list:
 
-            if type(tile)==Wall or type(tile)==Platform:
+            #check for collision with platform block
+            if type(tile) == Wall or type(tile) == Platform:
+                #check for collision in x direction
                 if tile.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
                     if center_distance(self.rect, tile.rect)[0][0]>0:
                         dx = tile.rect.right - self.rect.left
@@ -107,36 +108,38 @@ class Player():
                         dy = tile.rect.top - self.rect.bottom
                         self.vel_y = 0
                         self.jumps = self.maxjumps
-            elif type(tile)==Checkpoint:
+
+            #check for collision with checkpoint block
+            elif type(tile) == Checkpoint:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
                      self.respawnpoint = [tile.rect.left, tile.rect.top]
+
+            #check for collision with exit block
             elif type(tile)==Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
                     pygame.quit()
 
 
-
-
+        #animation for hurt ninja
         if self.hit:
             if self.time_since_last_hit < 20:
-
                 self.image = pygame.transform.scale(pygame.image.load("assets/Ninja_Hurt.png"), (self.tile_size - 5, self.tile_size - 5))
-
-
             if self.time_since_last_hit == 45:
                 self.hit = False
             self.time_since_last_hit += 1
+
+        #check for collision with enemies
         else:
-            for hitbox in world.enemy_list:
-                if pygame.Rect.colliderect(self.rect, hitbox.rect) and self.hit == False:
-                    self.hitpoints -= hitbox.damage
+            for enemy in world.enemy_list:
+                if pygame.Rect.colliderect(self.rect, enemy.rect) and self.hit == False:
+                    self.hitpoints -= enemy.damage
                     if self.hitpoints <= 0:
                         self.rect.left, self.rect.top = self.respawnpoint[0], self.respawnpoint[1]
                         print(self.rect.topleft, self.respawnpoint)
                         self.hitpoints = 6
                     self.hit = True
                     self.time_since_last_hit = 0
-                    distance = center_distance(self.rect, hitbox.rect)
+                    distance = center_distance(self.rect, enemy.rect)
                     self.vel_x = distance[0][0]*5
 
 
@@ -147,7 +150,8 @@ class Player():
         self.vertical_scroll_pos += dy
         if self.rect.bottom > screen_height:
             self.rect.bottom = screen_height
-            dy = 0
+            #dy = 0
+
 
     def draw(self, screen, camera_offset_x, camera_offset_y):
         offset_rect = pygame.Rect(self.rect.x+camera_offset_x, self.rect.y+camera_offset_y, self.rect.width, self.rect.height)
