@@ -34,9 +34,9 @@ def main():
     tile_size = 50
 
     #load images
-    image_names = ['Background', 'Brickwall', 'Platform', 'Exit', 'Lava1', 'Spikedwall', 'Checkpoint', 'Ghost1']
+    image_names = ['Main_Background', 'Brickwall', 'Platform', 'Exit', 'Lava1', 'Spikedwall', 'Checkpoint', 'Ghost1']
     images_dict = load_img(image_names)
-    background = pg.transform.scale(images_dict['Background'], (1000, 800))
+    background = pg.transform.scale(images_dict['Main_Background'], (1000, 800))
 
     #load map
     world_data =[
