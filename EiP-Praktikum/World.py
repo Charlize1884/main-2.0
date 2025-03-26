@@ -9,34 +9,34 @@ class World:
         self.enemy_list = []
 
 
-    def load_map(self, data, tile_size):
+    def load_map(self, level, image_dict, tile_size):
         row_count = 0
-        for row in data:
+        for row in level:
             col_count = 0
             for tile in row:
                 if tile == 1:
-                    object = Wall(col_count*tile_size, row_count*tile_size, tile_size)
+                    object = Wall(col_count*tile_size, row_count*tile_size, image_dict['Brickwall'], tile_size)
                     self.tile_list.append(object)
                 if tile == 9:
-                    object = Wall(col_count * tile_size, row_count * tile_size, tile_size)
+                    object = Wall(col_count * tile_size, row_count * tile_size, image_dict['Brickwall'], tile_size)
                     self.fake_tile_list.append(object)
                 elif tile == 2:
-                    object = Platform(col_count*tile_size, row_count*tile_size, tile_size)
+                    object = Platform(col_count*tile_size, row_count*tile_size, image_dict['Platform'], tile_size)
                     self.tile_list.append(object)
                 elif tile == 3:
-                    object = Exit(col_count*tile_size, row_count*tile_size, tile_size)
+                    object = Exit(col_count*tile_size, row_count*tile_size, image_dict['Exit'], tile_size)
                     self.tile_list.append(object)
                 elif tile == 4:
-                    object = Lava(col_count*tile_size, row_count*tile_size, tile_size)
+                    object = Lava(col_count*tile_size, row_count*tile_size, image_dict['Lava1'], tile_size)
                     self.enemy_list.append(object)
                 elif tile == 5 or tile == "p":
-                    object = Checkpoint(col_count * tile_size, row_count * tile_size, tile_size)
+                    object = Checkpoint(col_count * tile_size, row_count * tile_size, image_dict['Checkpoint'], tile_size)
                     self.tile_list.append(object)
                 elif tile == 6:
-                    object = Spiked_Wall(col_count * tile_size, row_count * tile_size, tile_size)
+                    object = SpikedWall(col_count * tile_size, row_count * tile_size, image_dict['Spikedwall'], tile_size)
                     self.enemy_list.append(object)
                 elif tile == "g":
-                    object = PatrolingGhost(col_count*tile_size, row_count * tile_size, tile_size)
+                    object = PatrolingGhost(col_count*tile_size, row_count * tile_size, image_dict['Ghost1'], tile_size)
                     self.enemy_list.append(object)
                 col_count += 1
             row_count += 1

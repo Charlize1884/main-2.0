@@ -4,8 +4,7 @@ import pygame
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y, image, hitpoints, damage, speed, action_speed, tile_size):
         pygame.sprite.Sprite.__init__(self)
-        player_img = pygame.image.load(image)
-        self.image = pygame.transform.scale(player_img, (tile_size - 5, tile_size - 5))
+        self.image = pygame.transform.scale(image, (tile_size - 5, tile_size - 5))
         self.rect = self.image.get_rect()
         self.hitpoints = hitpoints
         self.damage = damage
