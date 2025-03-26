@@ -28,7 +28,7 @@ class Lava(Tile):
 class Spiked_Wall(Tile):
     def __init__(self, x, y, tile_size):
         Tile.__init__(self, x, y, "assets/Spiked_Wall.png", tile_size)
-
+        self.damage = 6
 class Checkpoint(Tile):
     def __init__(self, x, y, tile_size):
         Tile.__init__(self, x, y, "assets/Jetpack.png", tile_size)
