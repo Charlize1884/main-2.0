@@ -28,13 +28,13 @@ class World:
                     self.tile_list.append(object)
                 elif tile == 4:
                     object = Lava(col_count*tile_size, row_count*tile_size, image_dict['Lava1'], tile_size)
-                    self.enemy_list.append(object)
+                    self.tile_list.append(object)
                 elif tile == 5 or tile == "p":
                     object = Checkpoint(col_count * tile_size, row_count * tile_size, image_dict['Checkpoint'], tile_size)
                     self.tile_list.append(object)
                 elif tile == 6:
                     object = SpikedWall(col_count * tile_size, row_count * tile_size, image_dict['Spikedwall'], tile_size)
-                    self.enemy_list.append(object)
+                    self.tile_list.append(object)
                 elif tile == "g":
                     object = PatrolingGhost(col_count*tile_size, row_count * tile_size, image_dict['Ghost1'], tile_size)
                     self.enemy_list.append(object)

@@ -27,7 +27,14 @@ class Player():
         self.respawnpoint=[(self.rect.left), (self.rect.top)]
         self.width =  self.image.get_width()
         self.height = self.image.get_height()
+
+        #movement
         self.vel_y = 0
+        self.speed = 5
+        self.dash = True
+        self.can_dash = True
+        self.time_since_dashed = 0
+        self.can_move = True
         self.can_jump = True
         self.jumps = 0
         self.maxjumps = 2
@@ -40,27 +47,53 @@ class Player():
         self.hit = False
         self.time_since_last_hit = 0
 
+
     def update(self, world, screen_height):
         dx = 0
         dy = 0
+
         walk_cooldown = 8
 
         #get key presses
         key = pygame.key.get_pressed()
         pygame.event.clear()
-        if key[K_SPACE] and self.jumps > 0 and self.can_jump:
+
+        if key[pygame.K_LCTRL] and self.can_dash and self.dash:
+            self.can_dash = False
+            self.can_move = False
+            self.dash = False
+
+        if not self.can_dash:
+            if self.time_since_dashed <= 6:
+                if self.direction == 1:
+                    dx = 30
+                else:
+                    dx = -30
+
+            if self.time_since_dashed > 6:
+                self.can_move = True
+            if self.time_since_dashed > 24:
+                self.can_dash = True
+                self.time_since_dashed = 0
+            self.time_since_dashed += 1
+        if self.can_move:
+            if key[pygame.K_LSHIFT]:
+                self.speed = 7
+            else:
+                self.speed = 4
+        if key[K_SPACE] and self.jumps > 0 and self.can_jump and self.can_move:
             self.vel_y = -15
             self.jumps -= 1
         if key[K_SPACE]:
             self.can_jump = False
         else:
             self.can_jump = True
-        if key[pygame.K_a]:
-            dx -= 5
+        if key[pygame.K_a] and self.can_move:
+            dx -= self.speed
             self.counter += 1
             self.direction = -1
-        if key[pygame.K_d]:
-            dx += 5
+        if key[pygame.K_d] and self.can_move:
+            dx += self.speed
             self.counter += 1
             self.direction = 1
         if key[pygame.K_d] == False and key[pygame.K_a] == False:
@@ -80,10 +113,11 @@ class Player():
                 self.image = self.images_left[self.index]
 
         #add gravity
-        self.vel_y += 1
-        if self.vel_y > 10:
-            self.vel_y = 10
-        dy += self.vel_y
+        if self.can_move:
+            self.vel_y += 1
+            if self.vel_y > 10:
+                self.vel_y = 10
+            dy += self.vel_y
 
         #check for collision
         for tile in world.tile_list:
@@ -108,9 +142,12 @@ class Player():
                         dy = tile.rect.top - self.rect.bottom
                         self.vel_y = 0
                         self.jumps = self.maxjumps
-
-            #check for collision with checkpoint block
-            elif type(tile) == Checkpoint:
+                        self.dash = True
+            elif type(tile)==Lava or type(tile)==Spiked_Wall:
+                if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
+                    self.hitpoints = 0
+                    self.hit = True
+            elif type(tile)==Checkpoint:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
                      self.respawnpoint = [tile.rect.left, tile.rect.top]
 
@@ -122,7 +159,10 @@ class Player():
 
         #animation for hurt ninja
         if self.hit:
-            if self.time_since_last_hit < 20:
+            if self.hitpoints <= 0:
+                self.rect.left, self.rect.top = self.respawnpoint[0], self.respawnpoint[1]
+                self.hitpoints = 6
+            elif self.time_since_last_hit < 20:
                 self.image = pygame.transform.scale(pygame.image.load("assets/Ninja_Hurt.png"), (self.tile_size - 5, self.tile_size - 5))
             if self.time_since_last_hit == 45:
                 self.hit = False
@@ -130,16 +170,13 @@ class Player():
 
         #check for collision with enemies
         else:
-            for enemy in world.enemy_list:
-                if pygame.Rect.colliderect(self.rect, enemy.rect) and self.hit == False:
-                    self.hitpoints -= enemy.damage
-                    if self.hitpoints <= 0:
-                        self.rect.left, self.rect.top = self.respawnpoint[0], self.respawnpoint[1]
-                        print(self.rect.topleft, self.respawnpoint)
-                        self.hitpoints = 6
+            self.time_since_last_hit = 0
+            for hitbox in world.enemy_list:
+                if pygame.Rect.colliderect(self.rect, hitbox.rect) and self.hit == False:
+                    self.hitpoints -= hitbox.damage
                     self.hit = True
-                    self.time_since_last_hit = 0
-                    distance = center_distance(self.rect, enemy.rect)
+
+                    distance = center_distance(self.rect, hitbox.rect)
                     self.vel_x = distance[0][0]*5
 
 
@@ -150,8 +187,6 @@ class Player():
         self.vertical_scroll_pos += dy
         if self.rect.bottom > screen_height:
             self.rect.bottom = screen_height
-            #dy = 0
-
 
     def draw(self, screen, camera_offset_x, camera_offset_y):
         offset_rect = pygame.Rect(self.rect.x+camera_offset_x, self.rect.y+camera_offset_y, self.rect.width, self.rect.height)

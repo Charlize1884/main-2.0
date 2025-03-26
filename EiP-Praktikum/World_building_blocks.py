@@ -28,13 +28,11 @@ class Exit(Tile):
 class Lava(Tile):
     def __init__(self, x, y, image, tile_size):
         Tile.__init__(self, x, y + 10, image, tile_size)
-        self.damage = 6
 
 
 class SpikedWall(Tile):
     def __init__(self, x, y, image, tile_size):
-        Tile.__init__(self, x, y, image, tile_size)
-        self.damage = 6
+        Tile.__init__(self, x, y - 5, image, tile_size)
 
 
 class Checkpoint(Tile):
