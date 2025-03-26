@@ -1,5 +1,3 @@
-from tkinter import image_names
-
 import pygame
 import pygame as pg
 import os
