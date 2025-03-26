@@ -12,6 +12,7 @@ fps = 60
 screen_width = 960
 screen_height = 640
 camera_offset_x=0
+camera_offset_y=0
 
 screen = pg.display.set_mode((screen_width, screen_height))
 pg.display.set_caption("Platformer")
@@ -103,7 +104,8 @@ while run:
         for block in world.fake_tile_list:
             block.rect.x += 5
     player.update(world, screen_height)
-    print(max(world.tile_list[0].rect.top, 0) , max(screen_height- world.fake_tile_list[-1].rect.bottom, 0))  #graphics
+
+    #graphics
     camera_offset_x=-max(world.tile_list[0].rect.left, 0)
     if camera_offset_x == 0:
         camera_offset_x= max(screen_width- world.tile_list[len(world_data[0])-1].rect.right, 0)
