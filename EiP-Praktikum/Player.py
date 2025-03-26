@@ -1,7 +1,7 @@
 import pygame
 from World_building_blocks import *
 from pygame.locals import *
-from usefull_functions import *
+from ultilities import *
 from Enemy import Enemy
 
 class Player():
@@ -31,11 +31,12 @@ class Player():
         self.vel_y = 0
         self.can_jump = True
         self.jumps = 0
-        self.maxjumps = 1
+        self.maxjumps = 200
         self.direction = 0
-
+        self.horizontal_scroll_pos = x
+        self.vertical_scroll_pos = y
         #enemy interaction
-        self.hitpoints = 6
+        self.hitpoints = 100000000
         self.hit = False
         self.time_since_last_hit = 0
 
@@ -141,7 +142,8 @@ class Player():
         #update player coordinates
         self.rect.x += dx
         self.rect.y += dy
-
+        self.horizontal_scroll_pos += dx
+        self.vertical_scroll_pos += dy
         if self.rect.bottom > screen_height:
             self.rect.bottom = screen_height
             dy = 0
