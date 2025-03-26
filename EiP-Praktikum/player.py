@@ -119,7 +119,7 @@ class Player():
         if self.hit:
             if self.time_since_last_hit < 20:
 
-                self.image = pygame.transform.scale(pygame.image.load("assets/Jetpack.png"), (self.tile_size - 5, self.tile_size - 5))
+                self.image = pygame.transform.scale(pygame.image.load("assets/Ninja_Hurt.png"), (self.tile_size - 5, self.tile_size - 5))
 
 
             if self.time_since_last_hit == 45:
