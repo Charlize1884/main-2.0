@@ -143,7 +143,7 @@ class Player():
                         self.vel_y = 0
                         self.jumps = self.maxjumps
                         self.dash = True
-            elif type(tile)==Lava or type(tile)==Spiked_Wall:
+            elif type(tile)==Lava or type(tile)==SpikedWall:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
                     self.hitpoints = 0
                     self.hit = True
