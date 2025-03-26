@@ -127,9 +127,9 @@ class Player():
 
                 if tile.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
                     if center_distance(self.rect, tile.rect)[0][0]>0:
-                        dx = tile.rect.right - self.rect.left
+                        dx = tile.rect.right - self.rect.left +1
                     else:
-                        dx = tile.rect.left - self.rect.right
+                        dx = tile.rect.left - self.rect.right -1
 
                 # check for collision in y direction
                 if tile.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
