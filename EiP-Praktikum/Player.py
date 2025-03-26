@@ -107,6 +107,10 @@ class Player():
                         dy = tile.rect.top - self.rect.bottom
                         self.vel_y = 0
                         self.jumps = self.maxjumps
+            elif type(tile)==Lava or type(tile)==Spiked_Wall:
+                if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
+                    self.hitpoints = 0
+                    self.hit = True
             elif type(tile)==Checkpoint:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
                      self.respawnpoint = [tile.rect.left, tile.rect.top]
@@ -118,7 +122,11 @@ class Player():
 
 
         if self.hit:
-            if self.time_since_last_hit < 20:
+            if self.hitpoints <= 0:
+                self.rect.left, self.rect.top = self.respawnpoint[0], self.respawnpoint[1]
+
+                self.hitpoints = 6
+            elif self.time_since_last_hit < 20:
 
                 self.image = pygame.transform.scale(pygame.image.load("assets/Ninja_Hurt.png"), (self.tile_size - 5, self.tile_size - 5))
 
@@ -127,15 +135,12 @@ class Player():
                 self.hit = False
             self.time_since_last_hit += 1
         else:
+            self.time_since_last_hit = 0
             for hitbox in world.enemy_list:
                 if pygame.Rect.colliderect(self.rect, hitbox.rect) and self.hit == False:
                     self.hitpoints -= hitbox.damage
-                    if self.hitpoints <= 0:
-                        self.rect.left, self.rect.top = self.respawnpoint[0], self.respawnpoint[1]
-                        print(self.rect.topleft, self.respawnpoint)
-                        self.hitpoints = 6
                     self.hit = True
-                    self.time_since_last_hit = 0
+
                     distance = center_distance(self.rect, hitbox.rect)
                     self.vel_x = distance[0][0]*5
 
