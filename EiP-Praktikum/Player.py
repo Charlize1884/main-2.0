@@ -36,7 +36,7 @@ class Player():
         self.horizontal_scroll_pos = x
         self.vertical_scroll_pos = y
         #enemy interaction
-        self.hitpoints = 100000000
+        self.hitpoints = 6
         self.hit = False
         self.time_since_last_hit = 0
 
