@@ -35,7 +35,7 @@ world_data =[
 [1, 0, 0, 0, 0, 0, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1],
-[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 1],
 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1],
 [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 4, 4, 4, 4, 4, 1, 9, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9],
 [1, 0, "p", 0, 0, 1, 1, 9, 9, 9, 9, 1, 1, 1, 1, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
@@ -43,14 +43,15 @@ world_data =[
 [9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
 ]
 row_count = 0
+world = World(world_data, tile_size)
 for i in world_data:
     col_count = 0
     for j in i:
         if j == "p":
-              player = Player(col_count*tile_size, row_count*tile_size, tile_size)
+            player = Player(col_count*tile_size, row_count*tile_size, tile_size)
         col_count += 1
     row_count += 1
-world = World(world_data, tile_size)
+
 run = True
 while run:
     key = pg.key.get_pressed()
@@ -65,32 +66,36 @@ while run:
         Enemy.update()
 
     #Level scrolling
-    if player.rect.bottom > screen_height - 100:
-        player.rect.y -= 15
+    while player.rect.bottom > screen_height - 100:
+        player.rect.y -=10
+        player.respawnpoint[1] -=10
         for entity in world.tile_list:
-            entity.rect.y -= 15
+            entity.rect.y -=10
         for enemy in world.enemy_list:
-            enemy.rect.y -= 15
+            enemy.rect.y -=10
         for block in world.fake_tile_list:
-            block.rect.y -= 15
-    if player.rect.bottom < screen_height / 3:
-        player.rect.y += 15
+            block.rect.y -=10
+    while player.rect.bottom < screen_height / 3:
+        player.rect.y +=10
+        player.respawnpoint[1] +=10
         for entity in world.tile_list:
-            entity.rect.y += 15
+            entity.rect.y +=10
         for enemy in world.enemy_list:
-            enemy.rect.y += 15
+            enemy.rect.y +=10
         for block in world.fake_tile_list:
-            block.rect.y += 15
-    if player.rect.left > screen_width - screen_width / 2:
+            block.rect.y +=10
+    while player.rect.left > screen_width - screen_width / 2:
         player.rect.x -= 5
+        player.respawnpoint[0] -= 5
         for entity in world.tile_list:
             entity.rect.x -= 5
         for enemy in world.enemy_list:
             enemy.rect.x -= 5
         for block in world.fake_tile_list:
             block.rect.x -= 5
-    if player.rect.right < screen_width / 2:
+    while player.rect.right < screen_width / 2:
         player.rect.x += 5
+        player.respawnpoint[0] += 5
         for entity in world.tile_list:
             entity.rect.x += 5
         for enemy in world.enemy_list:

@@ -31,5 +31,4 @@ class Spiked_Wall(Tile):
 
 class Checkpoint(Tile):
     def __init__(self, x, y, tile_size):
-        Tile.__init__(self, x, y, "assets/Checkpoint.png", tile_size)
-        self.set_respawnpoint = (x, y)
+        Tile.__init__(self, x, y, "assets/Jetpack.png", tile_size)
