@@ -149,5 +149,6 @@ class Player():
             self.rect.bottom = screen_height
             dy = 0
 
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
+    def draw(self, screen, camera_offset_x, camera_offset_y):
+        offset_rect = pygame.Rect(self.rect.x+camera_offset_x, self.rect.y+camera_offset_y, self.rect.width, self.rect.height)
+        screen.blit(self.image, offset_rect)

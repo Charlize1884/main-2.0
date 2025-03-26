@@ -41,11 +41,14 @@ class World():
                 col_count += 1
             row_count += 1
 
-    def draw(self, screen):
+    def draw(self, screen, camera_offset_x, camera_offset_y):
         for tile in self.tile_list:
-            screen.blit(tile.image, tile.rect)
+            offset_rect = pygame.Rect(tile.rect.x + camera_offset_x, tile.rect.y+camera_offset_y, tile.rect.width, tile.rect.height)
+            screen.blit(tile.image, offset_rect)
         for tile in self.fake_tile_list:
-            screen.blit(tile.image, tile.rect)
-    def draw_enemies(self, screen):
+            offset_rect = pygame.Rect(tile.rect.x + camera_offset_x, tile.rect.y+camera_offset_y, tile.rect.width, tile.rect.height)
+            screen.blit(tile.image, offset_rect)
+    def draw_enemies(self, screen, camera_offset_x, camera_offset_y):
         for enemy in self.enemy_list:
-            screen.blit(enemy.image, enemy.rect)
+            offset_rect = pygame.Rect(enemy.rect.x + camera_offset_x, enemy.rect.y+camera_offset_y, enemy.rect.width, enemy.rect.height)
+            screen.blit(enemy.image, offset_rect)
