@@ -32,7 +32,7 @@ class Lava(Tile):
 
 class SpikedWall(Tile):
     def __init__(self, x, y, image, tile_size):
-        Tile.__init__(self, x, y - 5, image, tile_size)
+        Tile.__init__(self, x, y - 1, image, tile_size)
 
 
 class Checkpoint(Tile):
