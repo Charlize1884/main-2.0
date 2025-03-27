@@ -21,8 +21,6 @@ def load_img(image_names: list) -> dict:
         raise SystemExit
     return images
 current_level = 0
-tile_size = 50
-player = Player(0, 0, tile_size)
 def main(current_level):
     #game setup
     pygame.init()
@@ -34,20 +32,20 @@ def main(current_level):
     pygame.display.set_caption("Platformer")
 
     #define game variables
-
+    tile_size = 50
 
     #load images
-    image_names = ['Main_Background', 'Brickwall', 'Platform', 'Exit', 'Lava1', 'Spikedwall', 'Checkpoint', 'Ghost1']
-    images_dict = load_img(image_names)
-    background = pygame.transform.scale(images_dict['Main_Background'], (1000, 800))
+    world_image_names = ['Main_Background', 'Brickwall', 'Platform', 'Exit', 'Lava1', 'Spikedwall', 'Checkpoint', 'Ghost1']
+    world_images_dict = load_img(world_image_names)
+    player_image_names = ['NinjaWalk1', 'NinjaWalk2', 'NinjaWalk3', 'NinjaHurt']
+    player_images_dict = load_img(player_image_names)
+    background = pygame.transform.scale(world_images_dict['Main_Background'], (1000, 800))
 
     #load map
     while current_level < len(world_data):
-
+        player = Player(0, 0, player_images_dict, tile_size)
         world = World()
-        world.load_map(world_data[current_level], images_dict, 50, player)
-
-
+        world.load_map(world_data[current_level], world_images_dict, 50, player)
 
         #MAIN LOOP
         run = True
@@ -55,6 +53,7 @@ def main(current_level):
             key = pygame.key.get_pressed()
             if key[pygame.K_ESCAPE]:
                 pygame.quit()
+                raise SystemExit
             clock.tick(fps)
 
             #draw background
@@ -121,7 +120,6 @@ def main(current_level):
             world.draw(screen, camera_offset_x,camera_offset_y)
             world.draw_enemies(screen, camera_offset_x,camera_offset_y)
             player.draw(screen, camera_offset_x, camera_offset_y)
-
 
             pygame.display.update()
             if player.level > current_level:

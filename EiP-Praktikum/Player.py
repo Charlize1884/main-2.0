@@ -4,7 +4,7 @@ from ultilities import *
 
 
 class Player():
-    def __init__(self, x, y, tile_size):
+    def __init__(self, x, y, images_dict, tile_size):
 
         #graphic
         self.images_right = []
@@ -13,13 +13,21 @@ class Player():
         self.counter = 0
         self.tile_size = tile_size
         self.level = 0
+
+        #load image for walk animation
         for num in range(1, 4):
-            img_right = pygame.image.load(f"assets/Ninja_Walk{num}.png")
+            key = f'NinjaWalk{num}'
+            img_right = images_dict[key]
             img_right = pygame.transform.scale(img_right, (self.tile_size-5 , self.tile_size-5 ))
             img_left = pygame.transform.flip(img_right, True, False)
             self.images_right.append(img_right)
             self.images_left.append(img_left)
         self.image = self.images_right[self.index]
+        #load image for hurt animation
+        image_hurt_right = pygame.transform.scale(images_dict['NinjaHurt'], (self.tile_size-5 , self.tile_size-5 ))
+        image_hurt_left = pygame.transform.flip(image_hurt_right, True, False)
+        self.image_hurt_right = image_hurt_right
+        self.image_hurt_left = image_hurt_left
 
         #position
         self.rect = self.image.get_rect()
@@ -52,7 +60,6 @@ class Player():
     def update(self, world, screen_height):
         dx = 0
         dy = 0
-
         walk_cooldown = 8
 
         #get key presses
@@ -66,12 +73,12 @@ class Player():
             self.dash = False
 
         if not self.can_dash:
+            #dashing
             if self.time_since_dashed <= 6:
                 if self.direction == 1:
                     dx = 30
                 else:
                     dx = -30
-
             if self.time_since_dashed > 6:
                 self.can_move = True
             if self.time_since_dashed > 24:
@@ -83,6 +90,7 @@ class Player():
                 self.speed = 7
             else:
                 self.speed = 5
+        #jumping
         if key[K_SPACE] and self.jumps > 0 and self.can_jump and self.can_move:
             self.vel_y = -15
             self.jumps -= 1
@@ -90,18 +98,24 @@ class Player():
             self.can_jump = False
         else:
             self.can_jump = True
+        #move left
         if key[pygame.K_a] and self.can_move:
             dx -= self.speed
             self.counter += 1
             self.direction = -1
+        #move right
         if key[pygame.K_d] and self.can_move:
             dx += self.speed
             self.counter += 1
             self.direction = 1
+        #standing still
         if key[pygame.K_d] == False and key[pygame.K_a] == False:
             self.counter = 0
             self.index = 0
-            self.image = self.images_right[self.index]
+            if self.direction == 1:     #if direction is right use right image
+                self.image = self.images_right[self.index]
+            elif self.direction == -1:  #if direction is left use left image
+                self.image = self.images_left[self.index]
 
         #handling animation
         if self.counter > walk_cooldown:
@@ -123,7 +137,6 @@ class Player():
 
         #check for collision
         for tile in world.tile_list:
-
             #check for collision with platform block
             if type(tile) == Wall or type(tile) == Platform:
                 #check for collision in x direction
@@ -136,7 +149,6 @@ class Player():
         # check for collision in y direction
         for tile in world.tile_list:
             if type(tile) == Wall or type(tile) == Platform:
-
                 if tile.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
                     # check if below the ground i.e. jumping
                     if self.vel_y < 0:
@@ -150,22 +162,19 @@ class Player():
                         self.dash = True
         self.rect.y += dy
         for tile in world.tile_list:
-
+            #check for collision with lava and spiked wall
             if type(tile)==Lava or type(tile)==SpikedWall:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
                     self.hitpoints = 0
                     self.hit = True
-            elif type(tile)==Checkpoint:
+            #check for collision with checkpoint
+            elif type(tile) == Checkpoint:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
                      self.respawnpoint = [tile.rect.left, tile.rect.top]
-
             #check for collision with exit block
-            elif type(tile)==Exit:
+            elif type(tile) == Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
                     self.level+=1
-
-
-
 
 
         #animation for hurt ninja
@@ -174,7 +183,10 @@ class Player():
                 self.rect.left, self.rect.top = self.respawnpoint[0], self.respawnpoint[1]
                 self.hitpoints = 6
             elif self.time_since_last_hit < 20:
-                self.image = pygame.transform.scale(pygame.image.load("assets/Ninja_Hurt.png"), (self.tile_size - 5, self.tile_size - 5))
+                if self.direction == 1:
+                    self.image = self.image_hurt_right
+                elif self.direction == -1:
+                    self.image = self.image_hurt_left
             if self.time_since_last_hit == 45:
                 self.hit = False
             self.time_since_last_hit += 1
@@ -186,14 +198,10 @@ class Player():
                 if pygame.Rect.colliderect(self.rect, hitbox.rect) and self.hit == False:
                     self.hitpoints -= hitbox.damage
                     self.hit = True
-
                     distance = center_distance(self.rect, hitbox.rect)
                     self.vel_x = distance[0][0]*5
 
-
         #update player coordinates
-
-
         self.horizontal_scroll_pos += dx
         self.vertical_scroll_pos += dy
         if self.rect.bottom > screen_height:
