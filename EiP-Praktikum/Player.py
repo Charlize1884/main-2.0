@@ -4,7 +4,7 @@ from ultilities import *
 
 
 class Player():
-    def __init__(self, x, y, tile_size):
+    def __init__(self, x, y, images_dict, tile_size):
 
         #graphic
         self.images_right = []
@@ -13,13 +13,17 @@ class Player():
         self.counter = 0
         self.tile_size = tile_size
         for num in range(1, 4):
-            img_right = pygame.image.load(f"assets/Ninja_Walk{num}.png")
+            key = f'NinjaWalk{num}'
+            img_right = images_dict[key]
             img_right = pygame.transform.scale(img_right, (self.tile_size-5 , self.tile_size-5 ))
             img_left = pygame.transform.flip(img_right, True, False)
             self.images_right.append(img_right)
             self.images_left.append(img_left)
         self.image = self.images_right[self.index]
-
+        image_hurt_right = pygame.transform.scale(images_dict['NinjaHurt'], (self.tile_size-5 , self.tile_size-5 ))
+        image_hurt_left = pygame.transform.flip(image_hurt_right, True, False)
+        self.image_hurt_right = image_hurt_right
+        self.image_hurt_left = image_hurt_left
         #position
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -73,6 +77,7 @@ class Player():
 
             if self.time_since_dashed > 6:
                 self.can_move = True
+
             if self.time_since_dashed > 24:
                 self.can_dash = True
                 self.time_since_dashed = 0
@@ -100,8 +105,10 @@ class Player():
         if key[pygame.K_d] == False and key[pygame.K_a] == False:
             self.counter = 0
             self.index = 0
-            self.image = self.images_right[self.index]
-
+            if self.direction == 1:
+                self.image = self.images_right[self.index]
+            elif self.direction == -1:
+                self.image = self.images_left[self.index]
         #handling animation
         if self.counter > walk_cooldown:
             self.counter = 0
@@ -112,6 +119,7 @@ class Player():
                 self.image = self.images_right[self.index]
             if self.direction == -1:
                 self.image = self.images_left[self.index]
+            print(self.direction)
 
         #add gravity
         if self.can_move:
@@ -165,7 +173,10 @@ class Player():
                 self.rect.left, self.rect.top = self.respawnpoint[0], self.respawnpoint[1]
                 self.hitpoints = 6
             elif self.time_since_last_hit < 20:
-                self.image = pygame.transform.scale(pygame.image.load("assets/Ninja_Hurt.png"), (self.tile_size - 5, self.tile_size - 5))
+                if self.direction == 1:
+                    self.image = self.image_hurt_right
+                elif self.direction == -1:
+                    self.image = self.image_hurt_left
             if self.time_since_last_hit == 45:
                 self.hit = False
             self.time_since_last_hit += 1
@@ -177,7 +188,6 @@ class Player():
                 if pygame.Rect.colliderect(self.rect, hitbox.rect) and self.hit == False:
                     self.hitpoints -= hitbox.damage
                     self.hit = True
-
                     distance = center_distance(self.rect, hitbox.rect)
                     self.vel_x = distance[0][0]*5
 

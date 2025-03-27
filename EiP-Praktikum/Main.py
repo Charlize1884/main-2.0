@@ -15,7 +15,7 @@ def load_img(image_names: list) -> dict:
                 image = image.convert_alpha()
             images[name] = image
     except FileNotFoundError:
-        print(f'Image {path} not found')
+        print(f'Image ddddd{path} not found')
         raise SystemExit
     return images
 
@@ -33,9 +33,11 @@ def main():
     tile_size = 50
 
     #load images
-    image_names = ['Main_Background', 'Brickwall', 'Platform', 'Exit', 'Lava1', 'Spikedwall', 'Checkpoint', 'Ghost1']
-    images_dict = load_img(image_names)
-    background = pygame.transform.scale(images_dict['Main_Background'], (1000, 800))
+    world_image_names = ['Main_Background', 'Brickwall', 'Platform', 'Exit', 'Lava1', 'Spikedwall', 'Checkpoint', 'Ghost1']
+    world_images_dict = load_img(world_image_names)
+    player_image_names = ['NinjaWalk1', 'NinjaWalk2', 'NinjaWalk3', 'NinjaHurt']
+    player_images_dict = load_img(player_image_names)
+    background = pygame.transform.scale(world_images_dict['Main_Background'], (1000, 800))
 
     #load map
     world_data =[
@@ -59,7 +61,7 @@ def main():
     ]
 
     world = World()
-    world.load_map(world_data, images_dict, 50)
+    world.load_map(world_data, world_images_dict, 50)
 
     #load player from map
     row_count = 0
@@ -67,7 +69,7 @@ def main():
         col_count = 0
         for j in i:
             if j == "p":
-                player = Player(col_count*tile_size, row_count*tile_size, tile_size)
+                player = Player(col_count*tile_size, row_count*tile_size, player_images_dict, tile_size)
                 break
             else:
                 col_count += 1
@@ -79,6 +81,7 @@ def main():
         key = pygame.key.get_pressed()
         if key[pygame.K_ESCAPE]:
             pygame.quit()
+            raise SystemExit
         clock.tick(fps)
 
         #draw background
