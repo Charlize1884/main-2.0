@@ -12,6 +12,7 @@ class Player():
         self.index = 0
         self.counter = 0
         self.tile_size = tile_size
+        self.level = 0
 
         #load image for walk animation
         for num in range(1, 4):
@@ -144,7 +145,10 @@ class Player():
                         dx = tile.rect.right - self.rect.left
                     else:
                         dx = tile.rect.left - self.rect.right
-                # check for collision in y direction
+        self.rect.x += dx
+        # check for collision in y direction
+        for tile in world.tile_list:
+            if type(tile) == Wall or type(tile) == Platform:
                 if tile.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
                     # check if below the ground i.e. jumping
                     if self.vel_y < 0:
@@ -156,8 +160,10 @@ class Player():
                         self.vel_y = 0
                         self.jumps = self.maxjumps
                         self.dash = True
-            #check for collision with lava
-            elif type(tile) == Lava or type(tile) == SpikedWall:
+        self.rect.y += dy
+        for tile in world.tile_list:
+            #check for collision with lava and spiked wall
+            if type(tile)==Lava or type(tile)==SpikedWall:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
                     self.hitpoints = 0
                     self.hit = True
@@ -168,7 +174,8 @@ class Player():
             #check for collision with exit block
             elif type(tile) == Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
-                    world.tile_list = []
+                    self.level+=1
+
 
         #animation for hurt ninja
         if self.hit:
@@ -195,8 +202,6 @@ class Player():
                     self.vel_x = distance[0][0]*5
 
         #update player coordinates
-        self.rect.x += dx
-        self.rect.y += dy
         self.horizontal_scroll_pos += dx
         self.vertical_scroll_pos += dy
         if self.rect.bottom > screen_height:
