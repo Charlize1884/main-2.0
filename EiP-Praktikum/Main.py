@@ -4,6 +4,7 @@ from Player import Player
 from World import World
 from Levels import world_data
 
+
 def load_img(image_names: list) -> dict:
     images = {}
     try:
