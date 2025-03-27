@@ -41,9 +41,12 @@ def main(current_level):
     player_images_dict = load_img(player_image_names)
     background = pygame.transform.scale(world_images_dict['Main_Background'], (1000, 800))
 
+    #create player
+    player = Player(0, 0, player_images_dict, tile_size)
+
     #load map
     while current_level < len(world_data):
-        player = Player(0, 0, player_images_dict, tile_size)
+
         world = World()
         world.load_map(world_data[current_level], world_images_dict, 50, player)
 
