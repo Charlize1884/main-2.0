@@ -60,7 +60,7 @@ class Player():
 
         pygame.event.clear()
 
-        if pygame.mouse.get_pressed()[0] and self.can_dash and self.dash:
+        if pygame.mouse.get_pressed()[0] and self.can_dash and self.dash and self.level > 0:
             self.can_dash = False
             self.can_move = False
             self.dash = False
@@ -163,6 +163,7 @@ class Player():
             elif type(tile)==Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
                     self.level+=1
+                    print(self.level)
 
 
 

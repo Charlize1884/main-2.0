@@ -119,7 +119,7 @@ def main(current_level):
             world.draw(screen, camera_offset_x,camera_offset_y)
             world.draw_enemies(screen, camera_offset_x,camera_offset_y)
             player.draw(screen, camera_offset_x, camera_offset_y)
-            print(world.tile_list[-1].rect)
+
 
             pygame.display.update()
             if player.level > current_level:
