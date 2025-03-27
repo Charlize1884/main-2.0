@@ -43,11 +43,9 @@ def main(current_level):
 
     #load map
     while current_level < len(world_data):
-        player = Player(0, 0, tile_size)
+        player = Player(0, 0, player_images_dict, tile_size)
         world = World()
-        world.load_map(world_data[current_level], images_dict, 50, player)
-
-
+        world.load_map(world_data[current_level], world_images_dict, 50, player)
 
         #MAIN LOOP
         run = True
