@@ -9,7 +9,7 @@ class World:
         self.enemy_list = []
 
 
-    def load_map(self, level, image_dict, tile_size):
+    def load_map(self, level, image_dict, tile_size, player):
         row_count = 0
         for row in level:
             col_count = 0
@@ -32,6 +32,9 @@ class World:
                 elif tile == 5 or tile == "p":
                     object = Checkpoint(col_count * tile_size, row_count * tile_size, image_dict['Checkpoint'], tile_size)
                     self.tile_list.append(object)
+                    if tile == "p":
+                        player.rect.x = col_count*tile_size
+                        player.rect.y = row_count*tile_size
                 elif tile == 6:
                     object = SpikedWall(col_count * tile_size, row_count * tile_size, image_dict['Spikedwall'], tile_size)
                     self.tile_list.append(object)

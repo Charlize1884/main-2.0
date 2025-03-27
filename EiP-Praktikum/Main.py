@@ -19,8 +19,8 @@ def load_img(image_names: list) -> dict:
         print(f'Image {path} not found')
         raise SystemExit
     return images
-
-def main():
+current_level = 0
+def main(current_level):
     #game setup
     pygame.init()
     clock = pygame.time.Clock()
@@ -39,100 +39,93 @@ def main():
     background = pygame.transform.scale(images_dict['Main_Background'], (1000, 800))
 
     #load map
+    while current_level < len(world_data):
+        player = Player(0, 0, tile_size)
+        world = World()
+        world.load_map(world_data[current_level], images_dict, 50, player)
 
 
-    world = World()
-    world.load_map(world_data, images_dict, 50)
 
-    #load player from map
-    row_count = 0
-    for i in world_data:
-        col_count = 0
-        for j in i:
-            if j == "p":
-                player = Player(col_count*tile_size, row_count*tile_size, tile_size)
-                break
-            else:
-                col_count += 1
-        row_count += 1
+        #MAIN LOOP
+        run = True
+        while run:
+            key = pygame.key.get_pressed()
+            if key[pygame.K_ESCAPE]:
+                pygame.quit()
+            clock.tick(fps)
 
-    #MAIN LOOP
-    run = True
-    while run:
-        key = pygame.key.get_pressed()
-        if key[pygame.K_ESCAPE]:
-            pygame.quit()
-        clock.tick(fps)
+            #draw background
+            screen.blit(background, (0, 0))
 
-        #draw background
-        screen.blit(background, (0, 0))
-
-        #update enemy entities
-        for enemy in world.enemy_list:
-            enemy.update()
-
-        #level scrolling
-
-        #scroll down
-        while player.rect.bottom > screen_height - 100:
-            player.rect.y -=10
-            player.respawnpoint[1] -=10
-            for entity in world.tile_list:
-                entity.rect.y -=10
+            #update enemy entities
             for enemy in world.enemy_list:
-                enemy.rect.y -=10
-            for block in world.fake_tile_list:
-                block.rect.y -=10
-        #scroll up
-        while player.rect.top < screen_height / 3:
-            player.rect.y +=10
-            player.respawnpoint[1] +=10
-            for entity in world.tile_list:
-                entity.rect.y +=10
-            for enemy in world.enemy_list:
-                enemy.rect.y +=10
-            for block in world.fake_tile_list:
-                block.rect.y +=10
-        #scroll left
-        while player.rect.left > screen_width - screen_width / 2:
-            player.rect.x -= 5
-            player.respawnpoint[0] -= 5
-            for entity in world.tile_list:
-                entity.rect.x -= 5
-            for enemy in world.enemy_list:
-                enemy.rect.x -= 5
-            for block in world.fake_tile_list:
-                block.rect.x -= 5
-        #scroll right
-        while player.rect.right < screen_width / 2:
-            player.rect.x += 5
-            player.respawnpoint[0] += 5
-            for entity in world.tile_list:
-                entity.rect.x += 5
-            for enemy in world.enemy_list:
-                enemy.rect.x += 5
-            for block in world.fake_tile_list:
-                block.rect.x += 5
+                enemy.update()
 
-        #update player
-        player.update(world, screen_height)
+            #level scrolling
 
-        #camera handling
-        camera_offset_x = -max(world.tile_list[0].rect.left, 0)
-        if camera_offset_x == 0:
-            camera_offset_x= max(screen_width- world.tile_list[len(world_data[0])-1].rect.right, 0)
+            #scroll down
+            while player.rect.bottom > screen_height - 100:
+                player.rect.y -=10
+                player.respawnpoint[1] -=10
+                for entity in world.tile_list:
+                    entity.rect.y -=10
+                for enemy in world.enemy_list:
+                    enemy.rect.y -=10
+                for block in world.fake_tile_list:
+                    block.rect.y -=10
+            #scroll up
+            while player.rect.top < screen_height / 3:
+                player.rect.y +=10
+                player.respawnpoint[1] +=10
+                for entity in world.tile_list:
+                    entity.rect.y +=10
+                for enemy in world.enemy_list:
+                    enemy.rect.y +=10
+                for block in world.fake_tile_list:
+                    block.rect.y +=10
+            #scroll left
+            while player.rect.left > screen_width - screen_width / 2:
+                player.rect.x -= 5
+                player.respawnpoint[0] -= 5
+                for entity in world.tile_list:
+                    entity.rect.x -= 5
+                for enemy in world.enemy_list:
+                    enemy.rect.x -= 5
+                for block in world.fake_tile_list:
+                    block.rect.x -= 5
+            #scroll right
+            while player.rect.right < screen_width / 2:
+                player.rect.x += 5
+                player.respawnpoint[0] += 5
+                for entity in world.tile_list:
+                    entity.rect.x += 5
+                for enemy in world.enemy_list:
+                    enemy.rect.x += 5
+                for block in world.fake_tile_list:
+                    block.rect.x += 5
 
-        camera_offset_y = -max(world.tile_list[0].rect.top, 0)
-        if camera_offset_y == 0:
-            camera_offset_y = max(screen_height- world.fake_tile_list[-1].rect.bottom, 0)
-        world.draw(screen, camera_offset_x,camera_offset_y)
-        world.draw_enemies(screen, camera_offset_x,camera_offset_y)
-        player.draw(screen, camera_offset_x, camera_offset_y)
+            #update player
+            player.update(world, screen_height)
 
-        pygame.display.update()
+            #camera handling
+            camera_offset_x = -max(world.tile_list[0].rect.left, 0)
+            if camera_offset_x == 0:
+                camera_offset_x= max(screen_width- world.tile_list[-1].rect.right, 0)
+
+            camera_offset_y = -max(world.tile_list[0].rect.top, 0)
+            if camera_offset_y == 0:
+                camera_offset_y = max(screen_height- world.fake_tile_list[-1].rect.bottom, 0)
+            world.draw(screen, camera_offset_x,camera_offset_y)
+            world.draw_enemies(screen, camera_offset_x,camera_offset_y)
+            player.draw(screen, camera_offset_x, camera_offset_y)
+
+            pygame.display.update()
+            if player.level > current_level:
+                current_level += 1
+                run = False
 
     pygame.quit()
 
 
 if __name__ == "__main__":
-    main()
+    main(current_level)

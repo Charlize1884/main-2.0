@@ -12,6 +12,7 @@ class Player():
         self.index = 0
         self.counter = 0
         self.tile_size = tile_size
+        self.level = 0
         for num in range(1, 4):
             img_right = pygame.image.load(f"assets/Ninja_Walk{num}.png")
             img_right = pygame.transform.scale(img_right, (self.tile_size-5 , self.tile_size-5 ))
@@ -155,7 +156,8 @@ class Player():
             #check for collision with exit block
             elif type(tile)==Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
-                    world.tile_list = []
+                    self.level+=1
+
 
 
 
