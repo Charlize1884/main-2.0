@@ -12,6 +12,8 @@ class Player():
         self.index = 0
         self.counter = 0
         self.tile_size = tile_size
+
+        #load image for walk animation
         for num in range(1, 4):
             key = f'NinjaWalk{num}'
             img_right = images_dict[key]
@@ -20,10 +22,12 @@ class Player():
             self.images_right.append(img_right)
             self.images_left.append(img_left)
         self.image = self.images_right[self.index]
+        #load image for hurt animation
         image_hurt_right = pygame.transform.scale(images_dict['NinjaHurt'], (self.tile_size-5 , self.tile_size-5 ))
         image_hurt_left = pygame.transform.flip(image_hurt_right, True, False)
         self.image_hurt_right = image_hurt_right
         self.image_hurt_left = image_hurt_left
+
         #position
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -55,7 +59,6 @@ class Player():
     def update(self, world, screen_height):
         dx = 0
         dy = 0
-
         walk_cooldown = 8
 
         #get key presses
@@ -69,15 +72,14 @@ class Player():
             self.dash = False
 
         if not self.can_dash:
+            #dashing
             if self.time_since_dashed <= 6:
                 if self.direction == 1:
                     dx = 30
                 else:
                     dx = -30
-
             if self.time_since_dashed > 6:
                 self.can_move = True
-
             if self.time_since_dashed > 24:
                 self.can_dash = True
                 self.time_since_dashed = 0
@@ -87,6 +89,7 @@ class Player():
                 self.speed = 7
             else:
                 self.speed = 5
+        #jumping
         if key[K_SPACE] and self.jumps > 0 and self.can_jump and self.can_move:
             self.vel_y = -15
             self.jumps -= 1
@@ -94,21 +97,25 @@ class Player():
             self.can_jump = False
         else:
             self.can_jump = True
+        #move left
         if key[pygame.K_a] and self.can_move:
             dx -= self.speed
             self.counter += 1
             self.direction = -1
+        #move right
         if key[pygame.K_d] and self.can_move:
             dx += self.speed
             self.counter += 1
             self.direction = 1
+        #standing still
         if key[pygame.K_d] == False and key[pygame.K_a] == False:
             self.counter = 0
             self.index = 0
-            if self.direction == 1:
+            if self.direction == 1:     #if direction is right use right image
                 self.image = self.images_right[self.index]
-            elif self.direction == -1:
+            elif self.direction == -1:  #if direction is left use left image
                 self.image = self.images_left[self.index]
+
         #handling animation
         if self.counter > walk_cooldown:
             self.counter = 0
@@ -119,7 +126,6 @@ class Player():
                 self.image = self.images_right[self.index]
             if self.direction == -1:
                 self.image = self.images_left[self.index]
-            print(self.direction)
 
         #add gravity
         if self.can_move:
@@ -130,7 +136,6 @@ class Player():
 
         #check for collision
         for tile in world.tile_list:
-
             #check for collision with platform block
             if type(tile) == Wall or type(tile) == Platform:
                 #check for collision in x direction
@@ -139,7 +144,6 @@ class Player():
                         dx = tile.rect.right - self.rect.left
                     else:
                         dx = tile.rect.left - self.rect.right
-
                 # check for collision in y direction
                 if tile.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
                     # check if below the ground i.e. jumping
@@ -152,20 +156,19 @@ class Player():
                         self.vel_y = 0
                         self.jumps = self.maxjumps
                         self.dash = True
-            elif type(tile)==Lava or type(tile)==SpikedWall:
+            #check for collision with lava
+            elif type(tile) == Lava or type(tile) == SpikedWall:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
                     self.hitpoints = 0
                     self.hit = True
-            elif type(tile)==Checkpoint:
+            #check for collision with checkpoint
+            elif type(tile) == Checkpoint:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
                      self.respawnpoint = [tile.rect.left, tile.rect.top]
-
             #check for collision with exit block
-            elif type(tile)==Exit:
+            elif type(tile) == Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
                     world.tile_list = []
-
-
 
         #animation for hurt ninja
         if self.hit:
@@ -190,7 +193,6 @@ class Player():
                     self.hit = True
                     distance = center_distance(self.rect, hitbox.rect)
                     self.vel_x = distance[0][0]*5
-
 
         #update player coordinates
         self.rect.x += dx
