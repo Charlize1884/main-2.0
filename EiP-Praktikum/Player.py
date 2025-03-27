@@ -132,8 +132,11 @@ class Player():
                         dx = tile.rect.right - self.rect.left
                     else:
                         dx = tile.rect.left - self.rect.right
-                self.rect.x += dx
-                # check for collision in y direction
+        self.rect.x += dx
+        # check for collision in y direction
+        for tile in world.tile_list:
+            if type(tile) == Wall or type(tile) == Platform:
+
                 if tile.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
                     # check if below the ground i.e. jumping
                     if self.vel_y < 0:
@@ -145,7 +148,10 @@ class Player():
                         self.vel_y = 0
                         self.jumps = self.maxjumps
                         self.dash = True
-            elif type(tile)==Lava or type(tile)==SpikedWall:
+        self.rect.y += dy
+        for tile in world.tile_list:
+
+            if type(tile)==Lava or type(tile)==SpikedWall:
                 if tile.rect.colliderect(self.rect.x, self.rect.y, self.width, self.height):
                     self.hitpoints = 0
                     self.hit = True
@@ -185,8 +191,8 @@ class Player():
 
 
         #update player coordinates
-        self.rect.x += dx
-        self.rect.y += dy
+
+
         self.horizontal_scroll_pos += dx
         self.vertical_scroll_pos += dy
         if self.rect.bottom > screen_height:
