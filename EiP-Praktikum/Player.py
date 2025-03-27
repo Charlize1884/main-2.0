@@ -56,9 +56,10 @@ class Player():
 
         #get key presses
         key = pygame.key.get_pressed()
+
         pygame.event.clear()
 
-        if key[pygame.K_LCTRL] and self.can_dash and self.dash:
+        if pygame.mouse.get_pressed()[0] and self.can_dash and self.dash:
             self.can_dash = False
             self.can_move = False
             self.dash = False
@@ -80,7 +81,7 @@ class Player():
             if key[pygame.K_LSHIFT]:
                 self.speed = 7
             else:
-                self.speed = 4
+                self.speed = 5
         if key[K_SPACE] and self.jumps > 0 and self.can_jump and self.can_move:
             self.vel_y = -15
             self.jumps -= 1
@@ -154,7 +155,8 @@ class Player():
             #check for collision with exit block
             elif type(tile)==Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
-                    pygame.quit()
+                    world.tile_list = []
+
 
 
         #animation for hurt ninja
