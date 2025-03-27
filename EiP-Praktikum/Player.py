@@ -132,7 +132,7 @@ class Player():
                         dx = tile.rect.right - self.rect.left
                     else:
                         dx = tile.rect.left - self.rect.right
-
+                self.rect.x += dx
                 # check for collision in y direction
                 if tile.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
                     # check if below the ground i.e. jumping

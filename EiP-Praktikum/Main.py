@@ -110,7 +110,7 @@ def main(current_level):
             #camera handling
             camera_offset_x = -max(world.tile_list[0].rect.left, 0)
             if camera_offset_x == 0:
-                camera_offset_x= max(screen_width- world.tile_list[-1].rect.right, 0)
+                camera_offset_x= max(screen_width- world.tile_list[len(world_data[current_level][0])-1].rect.right, 0)
 
             camera_offset_y = -max(world.tile_list[0].rect.top, 0)
             if camera_offset_y == 0:
@@ -118,6 +118,7 @@ def main(current_level):
             world.draw(screen, camera_offset_x,camera_offset_y)
             world.draw_enemies(screen, camera_offset_x,camera_offset_y)
             player.draw(screen, camera_offset_x, camera_offset_y)
+            print(world.tile_list[-1].rect)
 
             pygame.display.update()
             if player.level > current_level:
