@@ -1,5 +1,4 @@
 import pygame
-import pygame as pg
 import os
 from Player import Player
 from World import World
@@ -22,13 +21,13 @@ def load_img(image_names: list) -> dict:
 
 def main():
     #game setup
-    pg.init()
-    clock = pg.time.Clock()
+    pygame.init()
+    clock = pygame.time.Clock()
     fps = 60
     screen_width = 960
     screen_height = 640
-    screen = pg.display.set_mode((screen_width, screen_height))
-    pg.display.set_caption("Platformer")
+    screen = pygame.display.set_mode((screen_width, screen_height))
+    pygame.display.set_caption("Platformer")
 
     #define game variables
     tile_size = 50
@@ -36,7 +35,7 @@ def main():
     #load images
     image_names = ['Main_Background', 'Brickwall', 'Platform', 'Exit', 'Lava1', 'Spikedwall', 'Checkpoint', 'Ghost1']
     images_dict = load_img(image_names)
-    background = pg.transform.scale(images_dict['Main_Background'], (1000, 800))
+    background = pygame.transform.scale(images_dict['Main_Background'], (1000, 800))
 
     #load map
     world_data =[
@@ -77,9 +76,9 @@ def main():
     #MAIN LOOP
     run = True
     while run:
-        key = pg.key.get_pressed()
-        if key[pg.K_ESCAPE]:
-            pg.quit()
+        key = pygame.key.get_pressed()
+        if key[pygame.K_ESCAPE]:
+            pygame.quit()
         clock.tick(fps)
 
         #draw background
@@ -147,9 +146,9 @@ def main():
         world.draw_enemies(screen, camera_offset_x,camera_offset_y)
         player.draw(screen, camera_offset_x, camera_offset_y)
 
-        pg.display.update()
+        pygame.display.update()
 
-    pg.quit()
+    pygame.quit()
 
 
 if __name__ == "__main__":
