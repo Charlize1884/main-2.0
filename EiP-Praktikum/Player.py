@@ -163,7 +163,7 @@ class Player():
             elif type(tile)==Exit:
                 if tile.rect.colliderect(self.rect) and key[K_w]:
                     self.level+=1
-                    print(self.level)
+
 
 
 

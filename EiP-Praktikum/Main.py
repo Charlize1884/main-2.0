@@ -21,6 +21,8 @@ def load_img(image_names: list) -> dict:
         raise SystemExit
     return images
 current_level = 0
+tile_size = 50
+player = Player(0, 0, tile_size)
 def main(current_level):
     #game setup
     pygame.init()
@@ -32,7 +34,7 @@ def main(current_level):
     pygame.display.set_caption("Platformer")
 
     #define game variables
-    tile_size = 50
+
 
     #load images
     image_names = ['Main_Background', 'Brickwall', 'Platform', 'Exit', 'Lava1', 'Spikedwall', 'Checkpoint', 'Ghost1']
@@ -41,7 +43,7 @@ def main(current_level):
 
     #load map
     while current_level < len(world_data):
-        player = Player(0, 0, tile_size)
+
         world = World()
         world.load_map(world_data[current_level], images_dict, 50, player)
 
